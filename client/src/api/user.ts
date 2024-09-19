@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { User } from "../types/api";
-import { getCurrentUser, login, signup } from "./request";
+import { getCurrentUser, login, logout, signup } from "./request";
 
 export const useSignUp = () => {
   const queryClient = useQueryClient();
@@ -23,18 +23,27 @@ export const useLogin = () => {
 
   return useMutation<User, Error, { username: string; password: string }>({
     mutationFn: ({ username, password }) => login(username, password),
+    onSuccess: (user) => {
+      queryClient.setQueryData(["currentUser"], user);
+      queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+    },
+  });
+};
+
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["login"] });
+      queryClient.setQueryData(["currentUser"], null);
     },
   });
 };
 
 export const useCurrentUser = () => {
-  return useQuery<User, Error>({
+  return useQuery<User | null, Error>({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
-    // onError: (error: Error) => {
-    //   console.error('Error fetching current user:', error);
-    // }
   });
 };
