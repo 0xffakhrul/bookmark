@@ -17,3 +17,10 @@ export interface Bookmark {
   tags: string[];
   __v: number;
 }
+
+export type BookmarkInput = {
+  url: string;
+  name: string;
+  comment?: string;
+  tags: string[];
+};
