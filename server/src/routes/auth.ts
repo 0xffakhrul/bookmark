@@ -89,9 +89,13 @@ router.post("/logout", async (req: Request, res: Response) => {
 router.get("/me", protectRoute, async (req: CustomRequest, res: Response) => {
   try {
     const user = req.user;
+    console.log('User from request:', user);
     if (!user) {
+      console.log('User not found in request');
       return res.status(401).json({ message: "User not found" });
     }
+    
+    console.log('Successfully retrieved user data for:', user.username);
     res.json(user);
   } catch (error) {
     console.error("Error fetching user data:", error);
