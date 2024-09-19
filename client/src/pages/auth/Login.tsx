@@ -2,6 +2,7 @@ import { Rabbit } from "lucide-react";
 import { useState } from "react";
 import { useLogin } from "../../api/user";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const Login = () => {
   const [username, setUsername] = useState("");
@@ -10,11 +11,17 @@ export const Login = () => {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login({ username, password });
+
+    try {
+      login({ username, password });
+      toast.success("Login successful");
+    } catch (error) {
+      toast.error("Login failed");
+    }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center px-4 py-10">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center gap-3 mb-8">
           <Rabbit className="h-20 w-20 text-gray-400" />

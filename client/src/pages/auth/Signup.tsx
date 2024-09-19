@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSignUp } from "../../api/user";
 import { Rabbit } from "lucide-react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const Signup = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,13 @@ export const Signup = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signUp({ name, username, email, password });
+
+    try {
+      signUp({ name, username, email, password });
+      toast.success("Signup success!");
+    } catch (error) {
+      toast.error("Signup failed");
+    }
   };
 
   return (
